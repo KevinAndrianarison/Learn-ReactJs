@@ -1,14 +1,11 @@
 import Liste from "./Liste";
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import Form from "./Form";
-import axios from "axios";
-import { Context } from "../App";
+import { ThemeContexte } from "../contexte/useTheme";
+import { NameContexte } from "../contexte/useName";
 
 export default function Home() {
-  const [url, useUrl] = useContext(Context);
-  const [name, setName] = useState("Steeve");
   const [vif, setvif] = useState(false);
-  const [TestListAPI, setTestListAPI] = useState("");
   const [newtechno, setNewtechno] = useState("");
   const [techos, setTechno] = useState([
     { id: 1, nom: "VueJs" },
@@ -16,22 +13,16 @@ export default function Home() {
     { id: 3, nom: "Angular" },
   ]);
 
-  useEffect(() => {
-    axios
-      .get(`${url}/api/todo`)
-      .then((response) => {
-        console.log("Succes du GET All :", response.data);
-        setTestListAPI(response.data);
-      })
-      .catch((error) => {
-        console.error("Erreur du GET All :", error);
-      });
-  }, []);
+  const {theme, changeTheme} = useContext(ThemeContexte)
+  const {name, changeName} = useContext(NameContexte)
 
-  function changeName() {
-    setName("Kevin");
+
+
+
+  function changeValue() {
+    changeTheme()
+    changeName();
     setvif(!vif);
-    console.log(TestListAPI);
   }
 
   function addTechno(e) {
@@ -60,8 +51,8 @@ export default function Home() {
 
   return (
     <>
-      <p> Hello word ! {name}</p>
-      <button onClick={changeName}> X </button>
+      <p> Hello word ! {name} {theme}</p>
+      <button onClick={changeValue}> X </button>
       <ul>
         {techos.map((techno) => {
           return (
